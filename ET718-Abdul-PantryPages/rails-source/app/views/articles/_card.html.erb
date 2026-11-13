@@ -1,7 +1,0 @@
-<article class="post-card">
-  <div class="card-top"><span class="post-category"><%= article.meal %></span><span class="post-date"><%= article.created_at.strftime("%b %d, %Y") %></span></div>
-  <h3><%= link_to article.title, article_path(article) %></h3>
-  <div class="recipe-info"><span><%= article.prep_minutes %> MIN</span><span><%= article.difficulty %></span></div>
-  <p><%= truncate(article.body, length: 155) %></p>
-  <div class="card-bottom"><%= link_to "Read post →", article_path(article), class: "read-link" %><span><%= pluralize(article.comments.size, "comment") %></span></div>
-</article>
