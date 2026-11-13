@@ -1,0 +1,22 @@
+<article class="article-detail">
+  <%= link_to "← Back to all posts", articles_path, class: "back-link" %>
+  <div class="detail-meta"><span class="post-category"><%= @article.meal %></span><span class="post-date"><%= @article.created_at.strftime("%B %d, %Y") %></span></div>
+  <h1><%= @article.title %></h1>
+  <div class="recipe-timer"><span>⏱ <%= @article.prep_minutes %> minutes</span><span><%= @article.difficulty %> difficulty</span></div><div class="ingredients-panel"><h2>Ingredients</h2><ul><% @article.ingredients_list.each do |ingredient| %><li><%= ingredient %></li><% end %></ul></div>
+  <div class="article-body"><%= simple_format(@article.body) %></div>
+  <div class="article-actions"><%= link_to "Edit post", edit_article_path(@article), class: "button button-outline" %><%= button_to "Delete post", article_path(@article), method: :delete, class: "button button-danger", form: { data: { turbo_confirm: "Delete this post?" } } %></div>
+</article>
+<section id="comments" class="comments-section">
+  <div class="list-heading"><div><span class="eyebrow">CONVERSATION</span><h2>Comments</h2></div><span class="counter"><%= @article.comments.count %></span></div>
+  <% @article.comments.order(created_at: :desc).each do |comment| %>
+    <div class="comment"><div class="comment-header"><strong><%= comment.commenter %></strong><span><%= comment.created_at.strftime("%b %d, %Y") %></span></div><div><%= simple_format(comment.body) %></div><%= button_to "Remove comment", article_comment_path(@article, comment), method: :delete, class: "delete-link" %></div>
+  <% end %>
+  <% if @article.comments.none? %><p class="muted">No comments yet. Add the first one.</p><% end %>
+  <div class="comment-form"><h3>Join the conversation</h3>
+    <%= form_with model: [@article, @article.comments.build] do |form| %>
+      <div class="field"><%= form.label :commenter, "Your name" %><%= form.text_field :commenter, required: true, maxlength: 60 %></div>
+      <div class="field"><%= form.label :body, "Comment" %><%= form.text_area :body, required: true, rows: 4, maxlength: 2000 %></div>
+      <%= form.submit "Post comment", class: "button button-primary" %>
+    <% end %>
+  </div>
+</section>
